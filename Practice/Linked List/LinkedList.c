@@ -54,7 +54,7 @@ void display()
 
     if (current == NULL)
     {
-        printf("The linked list is empty!\n");
+        printf("\nThe linked list is empty!\n");
     }
     else
     {

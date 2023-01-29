@@ -52,6 +52,13 @@ void display()
 {
     struct node *current = head;
 
+    // while (current != NULL)
+    // {
+    //     printf("%d ", current->data);
+    //     current = current->next;
+    // }
+    // printf("\n");
+
     if (current == NULL)
     {
         printf("\nThe linked list is empty!\n");

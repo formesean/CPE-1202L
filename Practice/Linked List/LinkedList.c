@@ -24,7 +24,7 @@ void delete(int data)
     struct node *current = head;
     struct node *previous = NULL;
 
-    while (current != NULL && current->data != data)
+    while (current != NULL && current->data != data) // finds the node with the data value
     {
         previous = current;
         current = current->next;
@@ -42,7 +42,7 @@ void delete(int data)
         }
         else
         {
-            previous->next = current->next;
+            previous->next = current->next; // deletes current node, updates next pointer of the previous node to next pointer of the current node
         }
         free(current);
     }

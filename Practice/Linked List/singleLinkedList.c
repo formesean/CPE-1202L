@@ -1,5 +1,3 @@
-// implement a singly linked list with insert, delete and display operations
-
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -1,4 +1,4 @@
-// Reverse a linked list - Iterative method
+// Reverse a linked list using recursion
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -19,21 +19,18 @@ void insert(int data)
     head = newNode;
 }
 
-void reverse()
+void reverse(struct node *current)
 {
-    struct node *current, *prev, *next;
-    current = head;
-    prev = NULL;
-
-    while (current != NULL)
+    if (current->next == NULL)
     {
-        next = current->next; // stores the address of the nestruct xt node to the current node
-        current->next = prev; // cuts the link and current node address becomes prev
-        prev = current;       // prev becomes the address and moves to current
-        current = next;       // current becomes the address and moves to next
+        head = current;
+        return;
     }
+    reverse(current->next);
 
-    head = prev;
+    struct node *temp = current->next;
+    temp->next = current;
+    current->next = NULL;
 }
 
 void display()
@@ -55,12 +52,12 @@ int main()
     insert(4);
     insert(6);
     insert(8);
-    insert(10);
 
+    printf("\nList in order: \n");
     display();
 
-    reverse();
-
+    printf("\n\nList in reverse order: \n");
+    reverse(head);
     display();
 
     return 0;

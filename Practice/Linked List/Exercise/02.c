@@ -11,7 +11,7 @@ struct node
 
 struct node *head = NULL;
 
-void insert(int data, int num)
+void insert(int num)
 {
     int x;
     struct node *current = head;
@@ -38,21 +38,18 @@ void insert(int data, int num)
     }
 }
 
-void display(int num)
+void display()
 {
     struct node *current = head;
 
     while (current != NULL)
     {
-        for (int i = 0; i < num; i++)
-        {
-            printf("Data = %d\n", current->data);
-            current = current->next;
-        }
+        printf("Data = %d\n", current->data);
+        current = current->next;
     }
 }
 
-void reverseDisplay(int num)
+void reverseDisplay()
 {
     struct node *current, *prev, *next;
     current = head;
@@ -64,13 +61,9 @@ void reverseDisplay(int num)
         current->next = prev;
         prev = current;
         current = next;
-
-        for (int i = 0; i < num; i++)
-        {
-            printf("Data = %d\n", current->data);
-            head = prev;
-        }
     }
+
+    head = prev;
 }
 
 int main()
@@ -80,12 +73,14 @@ int main()
     printf("Input the number of nodes : ");
     scanf("%d", &num);
 
-    insert(data, num);
+    insert(num);
 
     printf("\nData entered in the list :\n");
-    display(num);
+    display();
+
+    reverseDisplay();
     printf("The list in reverse are :\n");
-    reverseDisplay(num);
+    display();
 
     return 0;
 }

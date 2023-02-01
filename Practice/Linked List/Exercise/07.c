@@ -1,4 +1,4 @@
-// Write a program in C to create and display Singly Linked List
+// write a program in C to delete first node of Singly Linked List
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,15 +13,16 @@ struct node *head = NULL;
 
 void insert(int num)
 {
-    int x;
     struct node *current = head;
+    int x;
 
     for (int i = 0; i < num; i++)
     {
         printf("Input data for node %d : ", i + 1);
         scanf("%d", &x);
+        fflush(stdin);
 
-        struct node *newNode = (struct node *)malloc(sizeof(struct node));
+        struct node *newNode = malloc(sizeof(struct node));
         newNode->data = x;
         newNode->next = NULL;
 
@@ -35,6 +36,23 @@ void insert(int num)
             current->next = newNode;
             current = current->next;
         }
+    }
+}
+
+void delete()
+{
+    struct node *current;
+
+    if (head == NULL)
+    {
+        printf("\nThere are no node in the list.\n");
+    }
+    else
+    {
+        current = head;
+        head = head->next;
+        printf("\nData of node 1 which is being deleted is : %d\n", current->data);
+        free(current);
     }
 }
 
@@ -55,9 +73,15 @@ int main()
 
     printf("Input the number of nodes : ");
     scanf("%d", &num);
+    fflush(stdin);
 
     insert(num);
-    printf("\nData entered in the list :\n");
+    printf("\nData entered in the list are :\n");
+    display(num);
+
+    delete ();
+
+    printf("\nData, after deletion of first node :\n");
     display();
 
     return 0;

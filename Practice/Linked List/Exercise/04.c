@@ -1,4 +1,4 @@
-// Write a program in C to create and display Singly Linked List
+// write a program in C to insert a new node at the beginnning of a Singly Linked
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +20,7 @@ void insert(int num)
     {
         printf("Input data for node %d : ", i + 1);
         scanf("%d", &x);
+        fflush(stdin);
 
         struct node *newNode = (struct node *)malloc(sizeof(struct node));
         newNode->data = x;
@@ -38,6 +39,14 @@ void insert(int num)
     }
 }
 
+void newInsert(int data)
+{
+    struct node *newNode = (struct node *)malloc(sizeof(struct node));
+    newNode->data = data;
+    newNode->next = head;
+    head = newNode;
+}
+
 void display()
 {
     struct node *current = head;
@@ -48,7 +57,6 @@ void display()
         current = current->next;
     }
 }
-
 int main()
 {
     int num, data;
@@ -58,6 +66,14 @@ int main()
 
     insert(num);
     printf("\nData entered in the list :\n");
+    display();
+
+    printf("\nInput data to insert at the beginning of the list: ");
+    scanf("%d", &data);
+    fflush(stdin);
+
+    newInsert(data);
+    printf("\nData after the inserted in the list are :\n");
     display();
 
     return 0;

@@ -27,7 +27,7 @@ void reverse()
 
     while (current != NULL)
     {
-        next = current->next; // stores the address of the nestruct xt node to the current node
+        next = current->next; // stores the address of the next node to the current node
         current->next = prev; // cuts the link and current node address becomes prev
         prev = current;       // prev becomes the address and moves to current
         current = next;       // current becomes the address and moves to next

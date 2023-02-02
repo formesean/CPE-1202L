@@ -1,7 +1,8 @@
-// Write a program in C to search an existing element in a singly linked list.
+// Write a C program to convert a Singly Linked list into a array and returns it.
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct node
 {
@@ -39,33 +40,40 @@ void insert(int num)
     }
 }
 
-void display()
+int *linkedListToArray(struct node *head, int *size)
 {
     struct node *current = head;
+    int count = 0, i = 0;
 
+    printf("The linked list: ");
+
+    // Counts the number of nodes in the linked list
     while (current != NULL)
     {
-        printf("Data = %d\n", current->data);
+        count++;
         current = current->next;
     }
-}
 
-int searchElement(struct node *head, int item, int index)
-{
-    if (head == NULL)
-        return -1;
+    int *array = (int *)malloc(count * sizeof(int));
+    current = head;
 
-    if (head->data == item)
-        return index;
+    // Copy the values of the nodes in the linked list
+    while (current != NULL)
+    {
+        array[i++] = current->data;
+        current = current->next;
+    }
 
-    index++;
-
-    return searchElement(head->next, item, index);
+    *size = count;
+    return array;
 }
 
 int main()
 {
-    int num, item, index = 0;
+    int num, size;
+
+    printf("Linked List: Convert a Singly Linked list into a array\n");
+    printf("-------------------------------------------------------------\n");
 
     printf("Enter the number of nodes : ");
     scanf("%d", &num);
@@ -73,19 +81,12 @@ int main()
 
     insert(num);
 
-    printf("\nData entered in the list are :\n");
-    display();
+    printf("\nReturn data entered in the list as a array:\n");
+    int *array = linkedListToArray(head, &size);
+    for (int i = 0; i < size; i++)
+        printf("%d ", array[i]);
 
-    printf("\nInput the element to be searched : ");
-    scanf("%d", &item);
-    fflush(stdin);
-
-    index = searchElement(head, item, 0);
-
-    if (index == -1)
-        printf("Element not found!");
-    else
-        printf("Element found at node %d", index + 1);
+    free(array);
 
     return 0;
 }

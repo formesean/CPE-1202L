@@ -1,7 +1,8 @@
-// Write a program in C to search an existing element in a singly linked list.
+// Write a C program to convert a Singly Linked list into a string and returns it.
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 struct node
 {
@@ -39,33 +40,25 @@ void insert(int num)
     }
 }
 
-void display()
+void linkedListToString(struct node *head, char *str)
 {
     struct node *current = head;
 
+    printf("The linked list: ");
     while (current != NULL)
     {
-        printf("Data = %d\n", current->data);
+        sprintf(str + strlen(str), "%d ", current->data);
         current = current->next;
     }
 }
 
-int searchElement(struct node *head, int item, int index)
-{
-    if (head == NULL)
-        return -1;
-
-    if (head->data == item)
-        return index;
-
-    index++;
-
-    return searchElement(head->next, item, index);
-}
-
 int main()
 {
-    int num, item, index = 0;
+    int num;
+    char str[100];
+
+    printf("Linked List: Convert a Singly Linked list into a string\n");
+    printf("-------------------------------------------------------------\n");
 
     printf("Enter the number of nodes : ");
     scanf("%d", &num);
@@ -73,19 +66,10 @@ int main()
 
     insert(num);
 
-    printf("\nData entered in the list are :\n");
-    display();
-
-    printf("\nInput the element to be searched : ");
-    scanf("%d", &item);
-    fflush(stdin);
-
-    index = searchElement(head, item, 0);
-
-    if (index == -1)
-        printf("Element not found!");
-    else
-        printf("Element found at node %d", index + 1);
+    printf("\nReturn data entered in the list as a string:\n");
+    strcpy(str, "");
+    linkedListToString(head, str);
+    printf("%s", str);
 
     return 0;
 }

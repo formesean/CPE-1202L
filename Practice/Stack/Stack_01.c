@@ -51,10 +51,14 @@ int main()
     display();
 
     pop();
-    // pop();
+    pop();
     display();
 
+    push(8);
     push(6);
+    display();
+
+    pop();
     display();
     return 0;
 }

@@ -21,12 +21,10 @@ void push(int data)
 
 void pop()
 {
-    struct node *temp;
+    struct node *temp = top;
 
     if (top == NULL) // stack is empty
         return;
-
-    temp = top;
     top = top->next;
     free(temp);
 }

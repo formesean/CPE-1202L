@@ -1,4 +1,4 @@
-// using Stack to reverse
+// using Stack to reverse - Array implementation
 
 #include <stdio.h>
 #include <stdlib.h>

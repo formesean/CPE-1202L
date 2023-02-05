@@ -1,4 +1,4 @@
-// Circular Singly Linked List - Insertion at the Head
+// Circular Singly Linked List - Deletion at the Head
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,14 +23,21 @@ void insert(int data)
         head->next = head;
         return;
     }
-
     struct node *temp = head;
     while (temp->next != head)
-    {
         temp = temp->next;
-    }
     temp->next = newNode;
     head = newNode;
+}
+
+void delete()
+{
+    struct node *current = head;
+    while (current->next != head)
+        current = current->next;
+    current->next = head->next;
+    free(head);
+    head = current->next;
 }
 
 void display()
@@ -51,7 +58,10 @@ int main()
     insert(6);
     insert(9);
     insert(12);
+    display();
 
+    delete ();
+    delete ();
     display();
 
     return 0;

@@ -1,4 +1,4 @@
-// Circular Singly Linked List - Insertion at the Head
+// Circular Singly Linked list - Insertion at the Tail/End
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,14 +23,12 @@ void insert(int data)
         head->next = head;
         return;
     }
-
     struct node *temp = head;
     while (temp->next != head)
     {
         temp = temp->next;
     }
     temp->next = newNode;
-    head = newNode;
 }
 
 void display()
@@ -47,6 +45,18 @@ void display()
 
 int main()
 {
+    int data, num;
+
+    // printf("Enter number of nodes: ");
+    // scanf("%d", &num);
+
+    // for (int i = 0; i < num; i++)
+    // {
+    //     printf("Enter number: ");
+    //     scanf("%d", &data);
+    //     insert(data);
+    // }
+
     insert(3);
     insert(6);
     insert(9);

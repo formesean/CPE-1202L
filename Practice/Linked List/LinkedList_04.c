@@ -36,6 +36,23 @@ void reverse()
     head = prev;
 }
 
+void reverseDisplay()
+{
+    struct node *current = head;
+
+    printf("The list: ");
+
+    if (head == NULL)
+        return;
+
+    while (current != NULL)
+    {
+        printf("%d ", current->data);
+        current = current->next;
+    }
+    printf("\n");
+}
+
 void display()
 {
     struct node *current = head;

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define MAX_OBJECTS 20
 
@@ -16,9 +17,29 @@ int main()
 {
     int numDrivers;
     int i = 0;
+    char names[50];
+    char *token;
 
     do
     {
+        FILE *db;
+        db = fopen("db.txt", "a+");
+        if (db == NULL)
+        {
+            printf("Cannot open file.");
+            return 1;
+        }
+
+        printf("Drivers:\n");
+        while (fgets(names, sizeof(names), db) != NULL)
+        {
+            token = strtok(names, ";");
+            printf("%s ", token);
+
+            token = strtok(NULL, ";");
+            printf("%s\n", token);
+        }
+
         printf("Enter the number of Drivers (maximum of %d): ", MAX_OBJECTS);
         scanf("%d", &numDrivers);
         fflush(stdin);
@@ -47,9 +68,15 @@ int main()
             printDriverDetails(&drivers[i], i);
         }
 
+        for (i = 0; i < numDrivers; i++)
+        {
+            fprintf(db, "%s;%s\n", drivers[i].firstName, drivers[i].lastName);
+        }
+
+        fclose(db);
+
         free(drivers);
         return 0;
-
     } while (numDrivers > MAX_OBJECTS);
 }
 

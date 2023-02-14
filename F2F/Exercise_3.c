@@ -30,14 +30,15 @@ int main()
             return 1;
         }
 
-        printf("Drivers:\n");
+        printf("Drivers of the Database:\n\n");
         while (fgets(names, sizeof(names), db) != NULL)
         {
             token = strtok(names, ";");
-            printf("%s ", token);
+            printf("\tDriver %d: %s ", i + 1, token);
 
             token = strtok(NULL, ";");
             printf("%s\n", token);
+            i++;
         }
 
         printf("Enter the number of Drivers (maximum of %d): ", MAX_OBJECTS);

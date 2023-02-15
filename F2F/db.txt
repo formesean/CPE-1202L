@@ -1,4 +1,3 @@
 Lewis;Hamilton
 Max;Verstappen
-Sergio;Perez
-Sebastian;Vettel
+Sean;Aguilar

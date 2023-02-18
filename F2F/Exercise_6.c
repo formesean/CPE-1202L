@@ -39,14 +39,16 @@ int main()
         switch (choice)
         {
         case 1:
-            printf("How many Jersey do you want to create? ");
+            system("cls");
+            display(&head);
+            printf("\nHow many Jersey do you want to create? ");
             scanf("%d", &num);
             fflush(stdin);
 
             for (int i = 0; i < num; i++)
             {
                 printf("\nEnter player's last name: ");
-                fgets(lastName, 50, stdin);
+                gets(lastName);
                 printf("Enter player's jersey number: ");
                 scanf("%d", &jerseyNumber);
                 fflush(stdin);
@@ -55,14 +57,16 @@ int main()
             display(&head);
             break;
         case 2:
-            printf("How many Jersey do you want to create? ");
+            system("cls");
+            display(&head);
+            printf("\nHow many Jersey do you want to create? ");
             scanf("%d", &num);
             fflush(stdin);
 
             for (int i = 0; i < num; i++)
             {
                 printf("\nEnter player's last name: ");
-                fgets(lastName, 50, stdin);
+                gets(lastName);
                 printf("Enter player's jersey number: ");
                 scanf("%d", &jerseyNumber);
                 fflush(stdin);
@@ -71,8 +75,10 @@ int main()
             display(&head);
             break;
         case 3:
+            system("cls");
+            display(&head);
             printf("\nEnter player's last name: ");
-            fgets(lastName, 50, stdin);
+            gets(lastName);
             printf("Enter player's jersey number: ");
             scanf("%d", &jerseyNumber);
             printf("Enter the position to insert at: ");
@@ -81,6 +87,8 @@ int main()
             display(&head);
             break;
         case 4:
+            system("cls");
+            display(&head);
             printf("\nEnter the position of the player to edit: ");
             scanf("%d", &pos);
             printf("Enter new jersey number: ");
@@ -90,15 +98,19 @@ int main()
             display(&head);
             break;
         case 5:
+            system("cls");
+            display(&head);
             printf("\nEnter the position to delete: ");
             scanf("%d", &pos);
             delete (&head, pos);
             display(&head);
             break;
         case 6:
+            system("cls");
             printf("\nExiting...\n");
             exit(1);
         default:
+            system("cls");
             printf("\nInvalid choice. Please try again.\n");
         }
 
@@ -115,6 +127,7 @@ void prepend(struct Node **head, char *lastName, int jerseyNumber)
     newNode->jerseyNumber = jerseyNumber;
     newNode->next = *head;
     *head = newNode;
+    system("cls");
 }
 
 void append(struct Node **head, char *lastName, int jerseyNumber)
@@ -137,6 +150,7 @@ void append(struct Node **head, char *lastName, int jerseyNumber)
         temp = temp->next;
     }
     temp->next = newNode;
+    system("cls");
 }
 
 void insert(struct Node **head, char *lastName, int jerseyNumber, int pos)
@@ -162,6 +176,7 @@ void insert(struct Node **head, char *lastName, int jerseyNumber, int pos)
 
     newNode->next = temp->next;
     temp->next = newNode;
+    system("cls");
 }
 
 void edit(struct Node **head, int new_jerseyNumber, int pos)
@@ -182,6 +197,7 @@ void edit(struct Node **head, int new_jerseyNumber, int pos)
     }
 
     current->jerseyNumber = new_jerseyNumber;
+    system("cls");
 }
 
 void delete(struct Node **head, int pos)
@@ -203,6 +219,7 @@ void delete(struct Node **head, int pos)
     struct Node *temp = newNode->next;
     newNode->next = temp->next;
     free(temp);
+    system("cls");
 }
 
 void display(struct Node **head)
@@ -213,7 +230,7 @@ void display(struct Node **head)
     printf("\nJersey List:\n");
     while (current != NULL)
     {
-        printf("%d.\nName: %sNumber: %d\n\n", i, current->lastName, current->jerseyNumber);
+        printf("\n\t%d.\n\tName: %s\n\tNumber: %d\n", i, current->lastName, current->jerseyNumber);
         current = current->next;
         i++;
     }

@@ -4,7 +4,7 @@
 int main()
 {
     int arr[] = {4, 1, 5, 3, 6, 10, 7, 8, 9, 2};
-    int length = 10;
+    int length = sizeof(arr) / sizeof(int);
 
     for (int i = 0; i < length; i++)
     {
@@ -21,7 +21,7 @@ int main()
 
     for (int i = 0; i < length; i++)
     {
-        printf("arr[%d] = %d\n", i, arr[i]);
+        printf("%d ", arr[i]);
     }
 
     return 0;

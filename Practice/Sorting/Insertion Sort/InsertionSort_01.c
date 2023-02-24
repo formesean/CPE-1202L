@@ -20,7 +20,7 @@ void sort(int arr[], int length)
 int main()
 {
     int arr[] = {4, 1, 5, 3, 6, 10, 7, 8, 9, 2};
-    int length = 10;
+    int length = sizeof(arr) / sizeof(int);
 
     sort(arr, length);
 

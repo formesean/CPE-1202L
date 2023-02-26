@@ -8,6 +8,10 @@
 //                            6 7
 //          1 2 3 4 5 6 7
 
+// Time Complexity
+// Best         Average       Worst
+// Ω(n log(n))  θ(n log(n))   O(n^2)
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>

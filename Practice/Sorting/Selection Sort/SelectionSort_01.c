@@ -1,3 +1,7 @@
+// Time Complexity
+// Best         Average       Worst
+// Ω(n^2)       θ(n^2)        O(n^2)
+
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -1,3 +1,7 @@
+// Time Complexity
+// Best         Average       Worst
+// Ω(n log(n))  θ(n log(n))   O(n log(n))
+
 #include <stdio.h>
 #include <stdlib.h>
 

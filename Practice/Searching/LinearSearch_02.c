@@ -13,6 +13,7 @@ struct Node *createNode(int data);
 void append(struct Node **head, int data);
 void display(struct Node *head);
 int search(struct Node *head, int element, int index);
+// int search(struct Node *head, int element);
 
 int main()
 {
@@ -33,6 +34,7 @@ int main()
     fflush(stdin);
 
     int index = search(head, element, 0);
+    // int index = search(head, element);
 
     if (index == -1)
         printf("Data not found!");
@@ -81,6 +83,7 @@ void display(struct Node *head)
     printf("\n");
 }
 
+// using recursion
 int search(struct Node *head, int element, int index)
 {
     if (head == NULL)
@@ -93,3 +96,20 @@ int search(struct Node *head, int element, int index)
 
     return search(head->next, element, index);
 }
+
+// using iterative
+// int search(struct Node *head, int element)
+// {
+//     struct Node *current = head;
+//     int index = 0;
+
+//     while (current != NULL)
+//     {
+//         if (current->data == element)
+//             return index;
+
+//         current = current->next;
+//         index++;
+//     }
+//     return -1;
+// }

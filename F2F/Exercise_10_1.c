@@ -36,9 +36,13 @@ int main()
     printf("\nUnsorted List: ");
     display(head);
 
+    printf("\n");
+
     bubbleSort(&head);
-    printf("Sorted List: ");
+    printf("\nSorted List: ");
     display(head);
+
+    freeList(head);
 
     return 0;
 }
@@ -89,6 +93,7 @@ void bubbleSort(struct Node **head)
 
     struct Node *prev, *current, *next;
     int swap;
+    int pass = 1;
 
     do
     {
@@ -120,6 +125,9 @@ void bubbleSort(struct Node **head)
                 next = next->next;
             }
         }
+
+        printf("Pass %d: ", pass++);
+        display(*head);
 
     } while (swap);
 }

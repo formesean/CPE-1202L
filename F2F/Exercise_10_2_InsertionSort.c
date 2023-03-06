@@ -136,7 +136,15 @@ void insertionSort()
 int binarySearch(struct Node *head, int key)
 {
     int low = 0;
-    int high = 9;
+    int high = 0;
+
+    struct Node *current = head;
+    while (current != NULL)
+    {
+        current = current->next;
+        high++;
+    }
+
     while (low <= high)
     {
         int mid = (low + high) / 2;

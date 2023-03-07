@@ -92,9 +92,9 @@ int binarySearch(struct Node *head, int target)
         if (current->data == target)
             return mid;
         else if (current->data > target)
-            low = mid + 1;
-        else
             high = mid - 1;
+        else
+            low = mid + 1;
     }
     return -1;
 }

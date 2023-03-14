@@ -75,14 +75,6 @@ void display(struct Node *head)
     }
     printf("\n");
 }
-
-void swap(struct Node *x, struct Node *y)
-{
-    int temp = x->data;
-    x->data = y->data;
-    y->data = temp;
-}
-
 struct Node *partition(struct Node *low, struct Node *high)
 {
     struct Node *pivot = low;

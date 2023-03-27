@@ -1,4 +1,4 @@
-// using Stack to reverse - Linked List implementation
+// using Stack to reverse - inked List implementation
 
 #include <stdio.h>
 #include <stdlib.h>

@@ -26,7 +26,7 @@ char pop(struct Stack *stack)
 {
     if (stack->top == -1)
     {
-        printf("Error: Stack underflow\n");
+        printf("Error: Stack underflw\n");
         exit(1);
     }
     return stack->string[stack->top--];

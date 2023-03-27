@@ -8,7 +8,7 @@
 // Last Open, First Closed
 // from left to right
 // if opening symbol, add to a list
-// if closing symbol, remov last opening symbol in list
+// if closing symbol, remove last opening symbol in list
 // program ends with an empty list
 
 #include <stdio.h>

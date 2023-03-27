@@ -22,7 +22,7 @@ void pop()
 {
     if (Top == -1)
     {
-        printf("Error: stack s empty\n");
+        printf("Error: stack is empty\n");
         return;
     }
     Top--;

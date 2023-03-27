@@ -23,7 +23,7 @@ void pop()
 {
     struct node *temp = top;
 
-    if (top == NULL) // stck is empty
+    if (top == NULL) // stack is empty
         return;
     top = top->next;
     free(temp);

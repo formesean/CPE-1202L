@@ -9,6 +9,8 @@ struct Node
     struct Node *left, *right;
 };
 
+// Creates a new node with the given data. Each node has an integer data value,
+// initial left and right child pointers to NULL, and returns a pointer to the new node.
 struct Node *createNode(int data)
 {
     struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
@@ -18,6 +20,8 @@ struct Node *createNode(int data)
     return newNode;
 }
 
+// Performs a left rotation (Zig) on the subtree rooted at node x,
+// returning the new root of the rotated subtree.
 struct Node *leftRotate(struct Node *x)
 {
     struct Node *y = x->right;
@@ -26,6 +30,8 @@ struct Node *leftRotate(struct Node *x)
     return y;
 }
 
+// Performs a right rotation (Zag) on the subtree rooted at node x,
+// returning the new root of the rotated subtree.
 struct Node *rightRotate(struct Node *x)
 {
     struct Node *y = x->left;
@@ -34,6 +40,9 @@ struct Node *rightRotate(struct Node *x)
     return y;
 }
 
+// Reorganizes the splay tree so that the node with the given data value becomes the new root.
+// If the data value is not found in the tree, the last visited node becomes the new root.
+// It also performs rotations to maintain the tree's structure.
 struct Node *splay(struct Node *root, int data)
 {
     if (root == NULL || root->data == data)
@@ -85,6 +94,10 @@ struct Node *splay(struct Node *root, int data)
     }
 }
 
+// Inserts a new node with the given data value into the splay tree.
+// First, it splays the tree based on the data value,
+// and then it inserts the new node in the correct position,
+// updating the left and right child pointers accordingly.
 struct Node *insert(struct Node *root, int data)
 {
     if (root == NULL)
@@ -112,6 +125,9 @@ struct Node *insert(struct Node *root, int data)
         return root;
 }
 
+// Deletes a node with the given data value from the splay tree.
+// It first splay the tree based on the data value,
+// and then it removes the node and adjusts the tree pointers accordingly.
 struct Node *delete(struct Node *root, int data)
 {
     if (root == NULL)
@@ -188,11 +204,16 @@ struct Node *delete(struct Node *root, int data)
     return root;
 }
 
+// Searches for a node with the given data value in the splay tree.
+// It calls the splay() function to find the node and rearrang the tree.
+// returning the new root.
 struct Node *search(struct Node *root, int data)
 {
     return splay(root, data);
 }
 
+// Recursively displays the in-order traversal of the splay tree.
+// It prints the left subtree, the root node's data, and the right subtree.
 void display(struct Node *root)
 {
     if (root != NULL)

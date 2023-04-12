@@ -16,6 +16,7 @@ struct Trie
     struct TrieNode *root;
 };
 
+// Creates a new trie node
 struct TrieNode *createTrieNode()
 {
     struct TrieNode *newNode = (struct TrieNode *)malloc(sizeof(struct TrieNode));
@@ -26,6 +27,7 @@ struct TrieNode *createTrieNode()
     return newNode;
 }
 
+// Creates a new trie with a root node
 struct Trie *createTrie()
 {
     struct Trie *trie = (struct Trie *)malloc(sizeof(struct Trie));
@@ -33,6 +35,7 @@ struct Trie *createTrie()
     return trie;
 }
 
+// Inserts a string into the trie iteratively
 void insert(struct Trie *trie, const char *word)
 {
     struct TrieNode *current = trie->root;
@@ -68,6 +71,7 @@ void insertRecursion(struct Trie *trie, const char *word)
     insertRecursionUtil(trie->root, word, 0);
 }
 
+// Searches for a string in the trie iteratively. Returns true if found, false otherwise
 bool search(struct Trie *trie, const char *word)
 {
     struct TrieNode *current = trie->root;
@@ -178,7 +182,7 @@ int main()
     insert(trie, "hello");
     insert(trie, "world");
     insert(trie, "help");
-    insert(trie, "where");
+    insert(trie, "hi");
 
     printf("Search 'hello': %s\n", search(trie, "hello") ? "Found" : "Not Found");
     printf("Search 'world': %s\n", search(trie, "world") ? "Found" : "Not Found");

@@ -67,6 +67,7 @@ void insert(struct BTreeNode **root, int key)
     }
     else
     {
+
         if ((*root)->numKeys == MAX_KEYS)
         {
             struct BTreeNode *newNode = createNode();
@@ -75,9 +76,10 @@ void insert(struct BTreeNode **root, int key)
             splitChild(newNode, *root, 0);
 
             int i = 0;
+            -
 
-            if (newNode->keys[0] < key)
-                i++;
+                if (newNode->keys[0] < key)
+                    i++;
 
             insert(&newNode->children[i], key);
             *root = newNode;

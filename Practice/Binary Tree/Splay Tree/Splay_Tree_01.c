@@ -1,257 +1,284 @@
-// Insertion in Splay Tree
-
 #include <stdio.h>
 #include <stdlib.h>
 
 struct Node
 {
-    int data;
-    struct Node *left, *right;
+    int key;
+    struct Node *left;
+    struct Node *right;
+    struct Node *parent;
 };
 
-// Creates a new node with the given data. Each node has an integer data value,
-// initial left and right child pointers to NULL, and returns a pointer to the new node.
-struct Node *createNode(int data)
+struct SplayTree
+{
+    struct Node *root;
+};
+
+struct Node *createNode(int key)
 {
     struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
-    newNode->data = data;
+    newNode->key = key;
     newNode->left = NULL;
     newNode->right = NULL;
+    newNode->parent = NULL;
     return newNode;
 }
 
-// Performs a left rotation (Zig) on the subtree rooted at node x,
-// returning the new root of the rotated subtree.
-struct Node *leftRotate(struct Node *x)
+struct SplayTree *newSplayTree()
+{
+    struct SplayTree *newSplay = (struct SplayTree *)malloc(sizeof(struct SplayTree));
+    newSplay->root = NULL;
+
+    return newSplay;
+}
+
+struct Node *maximum(struct SplayTree *tree, struct Node *n)
+{
+    if (n == NULL)
+    {
+        return NULL;
+    }
+
+    while (n->right != NULL)
+    {
+        n = n->right;
+    }
+    return n;
+}
+
+void leftRotate(struct SplayTree *tree, struct Node *x)
 {
     struct Node *y = x->right;
     x->right = y->left;
+
+    if (y->left != NULL)
+    {
+        y->left->parent = x;
+    }
+
+    y->parent = x->parent;
+
+    if (x->parent == NULL)
+    {
+        tree->root = y;
+    }
+    else if (x == x->parent->left)
+    {
+        x->parent->left = y;
+    }
+    else
+    {
+        x->parent->right = y;
+    }
+
     y->left = x;
-    return y;
+    x->parent = y;
 }
 
-// Performs a right rotation (Zag) on the subtree rooted at node x,
-// returning the new root of the rotated subtree.
-struct Node *rightRotate(struct Node *x)
+void rightRotate(struct SplayTree *tree, struct Node *x)
 {
     struct Node *y = x->left;
     x->left = y->right;
+
+    if (y->right != NULL)
+    {
+        y->right->parent = x;
+    }
+
+    y->parent = x->parent;
+
+    if (x->parent == NULL)
+    {
+        tree->root = y;
+    }
+    else if (x == x->parent->right)
+    {
+        x->parent->right = y;
+    }
+    else
+    {
+        x->parent->left = y;
+    }
+
     y->right = x;
-    return y;
+    x->parent = y;
 }
 
-// Reorganizes the splay tree so that the node with the given data value becomes the new root.
-// If the data value is not found in the tree, the last visited node becomes the new root.
-// It also performs rotations to maintain the tree's structure.
-struct Node *splay(struct Node *root, int data)
+void splay(struct SplayTree *tree, struct Node *n)
 {
-    if (root == NULL || root->data == data)
-        return root;
-
-    if (root->data > data)
+    while (n->parent != NULL)
     {
-        if (root->left == NULL)
-            return root;
-
-        if (root->left->data > data)
+        if (n->parent == tree->root)
         {
-            // Zig Zig (Left Left)
-            root->left->left = splay(root->left->left, data);
-            root = rightRotate(root);
+            if (n == n->parent->left)
+            {
+                rightRotate(tree, n->parent);
+            }
+            else
+            {
+                leftRotate(tree, n->parent);
+            }
         }
-        else if (data > root->left->data)
+        else
         {
-            // Zig Zag (Right Left)
-            root->left->right = splay(root->left->right, data);
+            struct Node *p = n->parent; // parent
+            struct Node *grandparent = p->parent;
 
-            if (root->left->right != NULL)
-                root->left = leftRotate(root->left);
+            if (n->parent->left == n && p->parent->left == p)
+            {
+                rightRotate(tree, grandparent);
+                rightRotate(tree, p);
+            }
+            else if (n->parent->right == n && p->parent->right == p)
+            {
+                leftRotate(tree, grandparent);
+                leftRotate(tree, p);
+            }
+            else if (n->parent->right == n && p->parent->left == p)
+            {
+                leftRotate(tree, p);
+                rightRotate(tree, grandparent);
+            }
+            else if (n->parent->left == n && p->parent->right == p)
+            {
+                rightRotate(tree, p);
+                leftRotate(tree, grandparent);
+            }
         }
-
-        return (root->left == NULL) ? root : rightRotate(root);
-    }
-    else
-    {
-        if (root->right == NULL)
-            return root;
-
-        if (data > root->right->data)
-        {
-            // Zag Zag (Right Right)
-            root->right->right = splay(root->right->right, data);
-            root = leftRotate(root);
-        }
-        else if (data < root->right->data)
-        {
-            // Zag Zig (Left Right)
-            root->right->left = splay(root->right->left, data);
-
-            if (root->right->left != NULL)
-                root->right = rightRotate(root->right);
-        }
-
-        return (root->right == NULL) ? root : leftRotate(root);
     }
 }
 
-// Inserts a new node with the given data value into the splay tree.
-// First, it splays the tree based on the data value,
-// and then it inserts the new node in the correct position,
-// updating the left and right child pointers accordingly.
-struct Node *insert(struct Node *root, int data)
+void insert(struct SplayTree *tree, struct Node *n)
 {
-    if (root == NULL)
-        return createNode(data);
+    struct Node *y = NULL;
+    struct Node *temp = tree->root;
 
-    root = splay(root, data);
-
-    if (data < root->data)
+    while (temp != NULL)
     {
-        struct Node *newNode = createNode(data);
-        newNode->right = root;
-        newNode->left = root->left;
-        root->left = NULL;
-        return newNode;
-    }
-    else if (data > root->data)
-    {
-        struct Node *newNode = createNode(data);
-        newNode->left = root;
-        newNode->right = root->right;
-        root->right = NULL;
-        return newNode;
-    }
-    else
-        return root;
-}
+        y = temp;
 
-// Deletes a node with the given data value from the splay tree.
-// It first splay the tree based on the data value,
-// and then it removes the node and adjusts the tree pointers accordingly.
-struct Node *delete(struct Node *root, int data)
-{
-    if (root == NULL)
-        return root;
-
-    root = splay(root, data);
-
-    if (data < root->data)
-    {
-        if (root->left == NULL)
-            return root;
-
-        // Zig Zig (Left Left)
-        if (data < root->left->data)
+        if (n->key < temp->key)
         {
-            root->left->left = delete (root->left->left, data);
-            root = rightRotate(root);
-        }
-        else if (data > root->left->data)
-        {
-            // Zig Zag (Right Left)
-            root->left->right = delete (root->left->right, data);
-
-            if (root->left->right != NULL)
-                root->left = leftRotate(root->left);
-        }
-
-        return (root->left == NULL) ? root : rightRotate(root);
-    }
-    else if (data > root->data)
-    {
-        if (root->right == NULL)
-            return root;
-
-        // Zig Zag (Right Left)
-        if (data < root->right->data)
-        {
-            root->right->left = delete (root->right->left, data);
-
-            if (root->right->left != NULL)
-                root->right = rightRotate(root->right);
-        }
-        else if (data > root->right->data)
-        {
-            // Zag Zag (Right Right)
-            root->right->right = delete (root->right->right, data);
-            root = leftRotate(root);
-        }
-
-        return (root->right == NULL) ? root : leftRotate(root);
-    }
-    else
-    {
-        if (root->left == NULL)
-        {
-            struct Node *temp = root->right;
-            free(root);
-            return temp;
-        }
-        else if (root->right == NULL)
-        {
-            struct Node *temp = root->left;
-            free(root);
-            return temp;
-        }
-
-        struct Node *temp = root->right;
-        while (temp->left != NULL)
             temp = temp->left;
-
-        root->data = temp->data;
-        root->right = delete (root->right, temp->data);
+        }
+        else
+        {
+            temp = temp->right;
+        }
     }
-    return root;
-}
 
-// Searches for a node with the given data value in the splay tree.
-// It calls the splay() function to find the node and rearrang the tree.
-// returning the new root.
-struct Node *search(struct Node *root, int data)
-{
-    return splay(root, data);
-}
+    n->parent = y;
 
-// Recursively displays the in-order traversal of the splay tree.
-// It prints the left subtree, the root node's data, and the right subtree.
-void display(struct Node *root)
-{
-    if (root != NULL)
+    if (y == NULL)
     {
-        display(root->left);
-        printf("%d ", root->data);
-        display(root->right);
+        tree->root = n;
+    }
+    else if (n->key < y->key)
+    {
+        y->left = n;
+    }
+    else
+    {
+        y->right = n;
+    }
+
+    splay(tree, n);
+}
+
+struct Node *search(struct SplayTree *tree, struct Node *n, int item)
+{
+    if (item == n->key)
+    {
+        splay(tree, n);
+        return n;
+    }
+    else if (item < n->key)
+    {
+        return search(tree, n->left, item);
+    }
+    else if (item > n->key)
+    {
+        return search(tree, n->right, item);
+    }
+    else
+    {
+        return NULL;
+    }
+}
+
+void delete(struct SplayTree *tree, struct Node *n)
+{
+    splay(tree, n);
+
+    struct SplayTree *leftSubtree = newSplayTree();
+    leftSubtree->root = tree->root->left;
+
+    if (leftSubtree->root != NULL)
+    {
+        leftSubtree->root->parent = NULL;
+    }
+
+    struct SplayTree *rightSubtree = newSplayTree();
+    rightSubtree->root = tree->root->right;
+
+    if (rightSubtree->root != NULL)
+    {
+        rightSubtree->root->parent = NULL;
+    }
+
+    free(n);
+
+    if (leftSubtree->root != NULL)
+    {
+        struct Node *m = maximum(leftSubtree, leftSubtree->root);
+
+        splay(tree, m);
+        leftSubtree->root->right = rightSubtree->root;
+        tree->root = leftSubtree->root;
+    }
+    else
+    {
+        tree->root = rightSubtree->root;
+    }
+}
+
+void inorderTraversal(struct SplayTree *tree, struct Node *n)
+{
+    if (n != NULL)
+    {
+        inorderTraversal(tree, n->left);
+        printf("%d ", n->key);
+        inorderTraversal(tree, n->right);
     }
 }
 
 int main()
 {
-    struct Node *root = NULL;
+    struct SplayTree *tree = newSplayTree();
+    struct Node *root;
 
-    root = insert(root, 15);
-    root = insert(root, 7);
-    root = insert(root, 25);
-    root = insert(root, 1);
-    root = insert(root, 11);
-    root = insert(root, 30);
+    root = createNode(10);
+    insert(tree, root);
 
-    printf("Splay Tree after insertion: ");
-    display(root);
-    printf("\n");
+    root = createNode(50);
+    insert(tree, root);
 
-    int searchElement = 11;
-    root = search(root, searchElement);
+    root = createNode(11);
+    insert(tree, root);
 
-    printf("\nSplay Tree after searching for %d: ", searchElement);
-    display(root);
-    printf("\n");
+    root = createNode(21);
+    insert(tree, root);
 
-    int deleteElement = 11;
-    root = delete (root, deleteElement);
+    root = createNode(19);
+    insert(tree, root);
 
-    printf("\nSplay Tree after deletion of %d: ", deleteElement);
-    display(root);
-    printf("\n");
+    root = createNode(1);
+    insert(tree, root);
+
+    root = createNode(8);
+    insert(tree, root);
+
+    inorderTraversal(tree, tree->root);
 
     return 0;
 }

@@ -187,6 +187,11 @@ void insert(struct SplayTree *tree, struct Node *n)
 
 struct Node *search(struct SplayTree *tree, struct Node *n, int item)
 {
+    if (n == NULL)
+    {
+        return NULL;
+    }
+
     if (item == n->key)
     {
         splay(tree, n);
@@ -255,29 +260,39 @@ void inorderTraversal(struct SplayTree *tree, struct Node *n)
 int main()
 {
     struct SplayTree *tree = newSplayTree();
-    struct Node *root;
+    struct Node *n1, *n2, *n3, *n4, *n5;
 
-    root = createNode(10);
-    insert(tree, root);
+    n1 = createNode(10);
+    insert(tree, n1);
 
-    root = createNode(50);
-    insert(tree, root);
+    n2 = createNode(50);
+    insert(tree, n2);
 
-    root = createNode(11);
-    insert(tree, root);
+    n3 = createNode(11);
+    insert(tree, n3);
 
-    root = createNode(21);
-    insert(tree, root);
+    // n4 = createNode(21);
+    // insert(tree, n4);
 
-    root = createNode(19);
-    insert(tree, root);
+    // n5 = createNode(19);
+    // insert(tree, n5);
 
-    root = createNode(1);
-    insert(tree, root);
+    inorderTraversal(tree, tree->root);
 
-    root = createNode(8);
-    insert(tree, root);
+    // int searchKey = 2;
 
+    // struct Node *foundNode = search(tree, tree->root, searchKey);
+
+    // if (foundNode != NULL)
+    // {
+    //     printf("\nNode with key = %d found\n", foundNode->key);
+    // }
+    // else
+    // {
+    //     printf("\nNode with key = %d not found\n", searchKey);
+    // }
+
+    delete (tree, n1);
     inorderTraversal(tree, tree->root);
 
     return 0;

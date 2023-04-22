@@ -20,8 +20,9 @@ struct BTreeNode *createNode()
     newNode->isLeaf = true;
 
     for (int i = 0; i < MAX_KEYS + 1; i++)
+    {
         newNode->children[i] = NULL;
-
+    }
     return newNode;
 }
 
@@ -33,25 +34,31 @@ void splitChild(struct BTreeNode *parent, struct BTreeNode *child, int index)
     newNode->numKeys = MAX_KEYS / 2;
 
     for (int i = 0; i < MAX_KEYS / 2; i++)
+    {
         newNode->keys[i] = child->keys[i + MAX_KEYS / 2 + 1];
+    }
 
     if (!child->isLeaf)
     {
         for (int i = 0; i < MAX_KEYS / 2 + 1; i++)
+        {
             newNode->children[i] = child->children[i + MAX_KEYS / 2 + 1];
+        }
     }
 
     child->numKeys = MAX_KEYS / 2;
 
     for (int i = parent->numKeys; i > index; i--)
+    {
         parent->children[i + 1] = parent->children[i];
-
+    }
     parent->children[index + 1] = newNode;
     parent->children[index] = child;
 
     for (int i = parent->numKeys - 1; i >= index; i--)
+    {
         parent->keys[i + 1] = parent->keys[i];
-
+    }
     parent->keys[index] = child->keys[MAX_KEYS / 2];
     parent->numKeys++;
 }
@@ -78,8 +85,9 @@ void insert(struct BTreeNode **root, int key)
             int i = 0;
 
             if (newNode->keys[0] < key)
+            {
                 i++;
-
+            }
             insert(&newNode->children[i], key);
             *root = newNode;
         }
@@ -103,18 +111,26 @@ void insert(struct BTreeNode **root, int key)
 struct BTreeNode *search(struct BTreeNode *root, int key)
 {
     if (root == NULL)
+    {
         return NULL;
+    }
 
     int i = 0;
 
     while (i < root->numKeys && key > root->keys[i])
+    {
         i++;
+    }
 
     if (root->keys[i] == key)
+    {
         return root;
+    }
 
     if (root->isLeaf)
+    {
         return NULL;
+    }
 
     return search(root->children[i], key);
 }
@@ -124,8 +140,7 @@ void display(struct BTreeNode *root)
 {
     if (root != NULL)
     {
-        int i;
-        for (i = 0; i < root->numKeys; i++)
+        for (int i = 0; i < root->numKeys; i++)
         {
             display(root->children[i]);
             printf("%d ", root->keys[i]);

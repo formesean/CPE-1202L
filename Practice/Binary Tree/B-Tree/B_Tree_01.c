@@ -1,167 +1,160 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 
-#define MAX_KEYS 3
+#define ORDER 3
 
-struct BTreeNode
+typedef struct BTreeNode
 {
-    int keys[MAX_KEYS];
-    struct BTreeNode *children[MAX_KEYS + 1];
-    int numKeys;
-    bool isLeaf;
-};
+    int keys[ORDER - 1];
+    struct BTreeNode *children[ORDER];
+    int num_keys;
+    int is_leaf;
+} BTreeNode;
 
-// Creates a new B-Tree node
-struct BTreeNode *createNode()
+BTreeNode *create_node()
 {
-    struct BTreeNode *newNode = (struct BTreeNode *)malloc(sizeof(struct BTreeNode));
-    newNode->numKeys = 0;
-    newNode->isLeaf = true;
-
-    for (int i = 0; i < MAX_KEYS + 1; i++)
+    BTreeNode *new_node = (BTreeNode *)malloc(sizeof(BTreeNode));
+    new_node->num_keys = 0;
+    new_node->is_leaf = 1;
+    for (int i = 0; i < ORDER; i++)
     {
-        newNode->children[i] = NULL;
+        new_node->children[i] = NULL;
     }
-    return newNode;
+    return new_node;
 }
 
-// Splits a child node of a B-Tree
-void splitChild(struct BTreeNode *parent, struct BTreeNode *child, int index)
+void insert(BTreeNode **root, int key)
 {
-    struct BTreeNode *newNode = createNode();
-    newNode->isLeaf = child->isLeaf;
-    newNode->numKeys = MAX_KEYS / 2;
-
-    for (int i = 0; i < MAX_KEYS / 2; i++)
-    {
-        newNode->keys[i] = child->keys[i + MAX_KEYS / 2 + 1];
-    }
-
-    if (!child->isLeaf)
-    {
-        for (int i = 0; i < MAX_KEYS / 2 + 1; i++)
-        {
-            newNode->children[i] = child->children[i + MAX_KEYS / 2 + 1];
-        }
-    }
-
-    child->numKeys = MAX_KEYS / 2;
-
-    for (int i = parent->numKeys; i > index; i--)
-    {
-        parent->children[i + 1] = parent->children[i];
-    }
-    parent->children[index + 1] = newNode;
-    parent->children[index] = child;
-
-    for (int i = parent->numKeys - 1; i >= index; i--)
-    {
-        parent->keys[i + 1] = parent->keys[i];
-    }
-    parent->keys[index] = child->keys[MAX_KEYS / 2];
-    parent->numKeys++;
-}
-
-// Inserts a key into a B-Tree
-void insert(struct BTreeNode **root, int key)
-{
+    // If the tree is empty, create a new root node
     if (*root == NULL)
     {
-        *root = createNode();
+        *root = create_node();
         (*root)->keys[0] = key;
-        (*root)->numKeys = 1;
+        (*root)->num_keys = 1;
+        return;
     }
-    else
+
+    // Find the appropriate leaf node to insert the key into
+    BTreeNode *current_node = *root;
+    while (!current_node->is_leaf)
     {
-
-        if ((*root)->numKeys == MAX_KEYS)
+        int i;
+        for (i = 0; i < current_node->num_keys; i++)
         {
-            struct BTreeNode *newNode = createNode();
-            newNode->isLeaf = false;
-            newNode->children[0] = *root;
-            splitChild(newNode, *root, 0);
-
-            int i = 0;
-
-            if (newNode->keys[0] < key)
+            if (key < current_node->keys[i])
             {
-                i++;
+                break;
             }
-            insert(&newNode->children[i], key);
-            *root = newNode;
+        }
+        current_node = current_node->children[i];
+    }
+
+    // Insert the key into the leaf node
+    int i;
+    for (i = 0; i < current_node->num_keys; i++)
+    {
+        if (key < current_node->keys[i])
+        {
+            break;
+        }
+    }
+    for (int j = current_node->num_keys; j > i; j--)
+    {
+        current_node->keys[j] = current_node->keys[j - 1];
+    }
+    current_node->keys[i] = key;
+    current_node->num_keys++;
+
+    // If the leaf node is full, split it
+    if (current_node->num_keys == ORDER - 1)
+    {
+        BTreeNode *new_node = create_node();
+        new_node->is_leaf = 1;
+
+        // Move the upper median key to the parent node
+        int median = (ORDER - 1) / 2;
+        int parent_key = current_node->keys[median];
+        current_node->num_keys = median;
+        new_node->num_keys = ORDER - median - 1;
+        for (int j = median + 1; j < ORDER; j++)
+        {
+            new_node->keys[j - median - 1] = current_node->keys[j];
+        }
+
+        // Update the parent node's child pointers
+        if (current_node == *root)
+        {
+            *root = create_node();
+            (*root)->keys[0] = parent_key;
+            (*root)->children[0] = current_node;
+            (*root)->children[1] = new_node;
+            (*root)->num_keys = 1;
+            current_node->is_leaf = 0;
         }
         else
         {
-            int i = (*root)->numKeys - 1;
-
-            while (i >= 0 && (*root)->keys[i] > key)
+            BTreeNode *parent_node = *root;
+            BTreeNode *current_child = current_node;
+            while (parent_node->children[0] != current_child)
             {
-                (*root)->keys[i + 1] = (*root)->keys[i];
-                i--;
+                parent_node = parent_node->children[0];
+                for (int j = 1; j <= parent_node->num_keys; j++)
+                {
+                    if (parent_node->children[j] == current_child)
+                    {
+                        current_child = parent_node->children[j];
+                        break;
+                    }
+                }
             }
 
-            (*root)->keys[i + 1] = key;
-            (*root)->numKeys++;
+            // Shift the parent node's keys and child pointers to make room for the new child
+            int i;
+            for (i = parent_node->num_keys; i > 0; i--)
+            {
+                if (parent_key < parent_node->keys[i - 1])
+                {
+                    parent_node->keys[i] = parent_node->keys[i - 1];
+                    parent_node->children[i + 1] = parent_node->children[i];
+                }
+                else
+                {
+                    break;
+                }
+            }
+            parent_node->keys[i] = parent_key;
+            parent_node->children[i + 1] = new_node;
+            parent_node->num_keys++;
+            current_node->is_leaf = 0;
         }
     }
 }
 
-// Searches for a key in a B-Tree
-struct BTreeNode *search(struct BTreeNode *root, int key)
+void inorder_traversal(BTreeNode *root)
 {
     if (root == NULL)
     {
-        return NULL;
+        return;
     }
 
-    int i = 0;
-
-    while (i < root->numKeys && key > root->keys[i])
+    // Traverse all the keys in the left subtree
+    inorder_traversal(root->children[0]);
+    for (int i = 0; i < root->num_keys; i++)
     {
-        i++;
-    }
-
-    if (root->keys[i] == key)
-    {
-        return root;
-    }
-
-    if (root->isLeaf)
-    {
-        return NULL;
-    }
-
-    return search(root->children[i], key);
-}
-
-// In order traversal display of a B-Tree
-void display(struct BTreeNode *root)
-{
-    if (root != NULL)
-    {
-        for (int i = 0; i < root->numKeys; i++)
-        {
-            display(root->children[i]);
-            printf("%d ", root->keys[i]);
-        }
-        display(root->children[root->numKeys]);
+        printf("%d ", root->keys[i]);
+        // Traverse all the keys in the subtree rooted at the i-th child
+        inorder_traversal(root->children[i + 1]);
     }
 }
 
 int main()
 {
-    struct BTreeNode *root = NULL;
-
-    insert(&root, 50);
-    insert(&root, 30);
-    insert(&root, 20);
-    insert(&root, 40);
-    insert(&root, 70);
-
-    printf("In-order traversal of the B-Tree: ");
-    display(root);
-    printf("\n");
-
+    BTreeNode *root = NULL;
+    insert(&root, 1);
+    insert(&root, 2);
+    insert(&root, 3);
+    insert(&root, 4);
+    insert(&root, 5);
+    inorder_traversal(root);
     return 0;
 }

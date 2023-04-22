@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+// This code is like a dictionary. It stores words. but only accepts words that are all lower case letters
+
 #define ALPHABET_LETTERS 26
 
 struct TrieNode
@@ -97,11 +99,11 @@ int checkDivergence(struct TrieNode *root, char *word)
     {
         int index = word[i] - 'a';
 
-        if (temp->childNode[index])
+        if (temp->childNode[index] != NULL)
         {
             for (int j = 0; j < ALPHABET_LETTERS; j++)
             {
-                if (j != index && temp->childNode[j])
+                if (j != index && temp->childNode[j] != NULL)
                 {
                     lastIndex = i + 1;
                     break;
@@ -115,7 +117,7 @@ int checkDivergence(struct TrieNode *root, char *word)
 
 char *findLongestPrefix(struct TrieNode *root, char *word)
 {
-    if (!word || word[0] == '\0')
+    if (word == NULL || word[0] == '\0')
     {
         return NULL;
     }
@@ -145,7 +147,7 @@ char *findLongestPrefix(struct TrieNode *root, char *word)
 int isLeafNode(struct TrieNode *root, char *word)
 {
     struct TrieNode *temp = root;
-    for (int i = 0; word[i]; i++)
+    for (int i = 0; word[i] != '\0'; i++)
     {
         int index = (int)word[i] - 'a';
         if (temp->childNode[index])
@@ -158,12 +160,12 @@ int isLeafNode(struct TrieNode *root, char *word)
 
 struct TrieNode *deleteTrie(struct TrieNode *root, char *word)
 {
-    if (!root)
+    if (root == NULL)
     {
         return NULL;
     }
 
-    if (!word || word[0] == '\0')
+    if (word == NULL || word[0] == '\0')
     {
         return root;
     }
@@ -179,6 +181,8 @@ struct TrieNode *deleteTrie(struct TrieNode *root, char *word)
     if (longestPrefix[0] == '\0')
     {
         free(longestPrefix);
+        longestPrefix = NULL;
+
         return root;
     }
 
@@ -195,6 +199,8 @@ struct TrieNode *deleteTrie(struct TrieNode *root, char *word)
         else
         {
             free(longestPrefix);
+            longestPrefix = NULL;
+
             return root;
         }
     }
@@ -204,7 +210,7 @@ struct TrieNode *deleteTrie(struct TrieNode *root, char *word)
     for (; i < len; i++)
     {
         int index = (int)word[i] - 'a';
-        if (temp->childNode[index])
+        if (temp->childNode[index] != NULL)
         {
             struct TrieNode *removeNode = temp->childNode[index];
 
@@ -215,6 +221,8 @@ struct TrieNode *deleteTrie(struct TrieNode *root, char *word)
     }
 
     free(longestPrefix);
+    longestPrefix = NULL;
+
     return root;
 }
 
@@ -254,23 +262,19 @@ int main()
 
     root = insertTrie(root, "hello");
     root = insertTrie(root, "help");
-    root = insertTrie(root, "door");
-    root = insertTrie(root, "do");
 
     displaySearch(root, "hello");
-    displaySearch(root, "do");
 
+    printf("\n");
     displayTrie(root);
     printf("\n");
 
-    root = deleteTrie(root, "hello");
+    root = deleteTrie(root, "help");
     displayTrie(root);
     printf("\n");
-
-    root = deleteTrie(root, "do");
-    displayTrie(root);
     printf("\n");
 
+    displaySearch(root, "help");
     freeTrieNode(root);
     return 0;
 }

@@ -19,9 +19,9 @@ struct Node *root = NULL;
 
 void insert(int key);
 int ins(struct Node *r, int x, int *y, struct Node **u);
-void display(struct Node *root, int);
 int searchPos(int key, int *key_arr, int numKeys);
 void inorder(struct Node *ptr);
+void display(struct Node *root, int);
 
 int main()
 {
@@ -142,6 +142,34 @@ int ins(struct Node *ptr, int key, int *upKey, struct Node **newNode)
     return INSERT_IT;
 }
 
+int searchPos(int key, int *key_arr, int numKeys)
+{
+    int pos = 0;
+    while (pos < numKeys && key > key_arr[pos])
+    {
+        pos++;
+    }
+    return pos;
+}
+
+void inorder(struct Node *ptr)
+{
+    if (ptr != NULL)
+    {
+        if (ptr->numKeys >= 1)
+        {
+            inorder(ptr->children[0]);
+            printf("%d ", ptr->keys[0]);
+            inorder(ptr->children[1]);
+            if (ptr->numKeys == 2)
+            {
+                printf("%d ", ptr->keys[1]);
+                inorder(ptr->children[2]);
+            }
+        }
+    }
+}
+
 void display(struct Node *ptr, int blanks)
 {
     if (ptr)
@@ -155,34 +183,6 @@ void display(struct Node *ptr, int blanks)
         for (i = 0; i <= ptr->numKeys; i++)
         {
             display(ptr->children[i], blanks + 10);
-        }
-    }
-}
-
-int searchPos(int key, int *key_arr, int numKeys)
-{
-    int pos = 0;
-    while (pos < numKeys && key > key_arr[pos])
-    {
-        pos++;
-    }
-    return pos;
-}
-
-void inorder(struct Node *ptr)
-{
-    if (ptr)
-    {
-        if (ptr->numKeys >= 1)
-        {
-            inorder(ptr->children[0]);
-            printf("%d ", ptr->keys[0]);
-            inorder(ptr->children[1]);
-            if (ptr->numKeys == 2)
-            {
-                printf("%d ", ptr->keys[1]);
-                inorder(ptr->children[2]);
-            }
         }
     }
 }

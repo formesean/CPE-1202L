@@ -263,10 +263,11 @@ int main()
     root = insertTrie(root, "hello");
     root = insertTrie(root, "help");
 
-    displaySearch(root, "hello");
+    displayTrie(root);
 
     printf("\n");
-    displayTrie(root);
+    printf("\n");
+    displaySearch(root, "hello");
     printf("\n");
 
     root = deleteTrie(root, "help");

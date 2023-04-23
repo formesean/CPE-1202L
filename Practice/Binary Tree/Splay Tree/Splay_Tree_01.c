@@ -124,22 +124,22 @@ void splay(struct SplayTree *tree, struct Node *n)
             struct Node *p = n->parent; // parent
             struct Node *grandparent = p->parent;
 
-            if (n->parent->left == n && p->parent->left == p)
+            if (p->left == n && grandparent->left == p)
             {
                 rightRotate(tree, grandparent);
                 rightRotate(tree, p);
             }
-            else if (n->parent->right == n && p->parent->right == p)
+            else if (p->right == n && grandparent->right == p)
             {
                 leftRotate(tree, grandparent);
                 leftRotate(tree, p);
             }
-            else if (n->parent->right == n && p->parent->left == p)
+            else if (p->right == n && grandparent->left == p)
             {
                 leftRotate(tree, p);
                 rightRotate(tree, grandparent);
             }
-            else if (n->parent->left == n && p->parent->right == p)
+            else if (p->left == n && grandparent->right == p)
             {
                 rightRotate(tree, p);
                 leftRotate(tree, grandparent);
@@ -292,8 +292,9 @@ int main()
     //     printf("\nNode with key = %d not found\n", searchKey);
     // }
 
-    delete (tree, n1);
-    inorderTraversal(tree, tree->root);
+    // delete (tree, n1);
+    // printf("\n");
+    // inorderTraversal(tree, tree->root);
 
     return 0;
 }

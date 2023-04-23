@@ -45,6 +45,7 @@ int main()
     insert(5);
 
     inorder(root);
+    printf("\n");
     display(root, 0);
 
     return 0;

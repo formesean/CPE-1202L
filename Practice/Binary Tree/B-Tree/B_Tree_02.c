@@ -15,7 +15,6 @@ struct Node *root = NULL;
 #define SEARCH_FAILURE 1
 #define SUCCESS 2
 #define INSERT_IT 3
-#define LESS_KEYS 4
 
 void insert(int key);
 int ins(struct Node *r, int x, int *y, struct Node **u);

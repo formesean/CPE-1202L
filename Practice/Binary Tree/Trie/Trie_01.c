@@ -48,7 +48,7 @@ struct TrieNode *insertTrie(struct TrieNode *root, char *word)
 
     for (int i = 0; word[i] != '\0'; i++)
     {
-        int index = (int)word[i] - 'a';
+        int index = word[i] - 'a';
         if (temp->childNode[index] == NULL)
         {
             temp->childNode[index] = createTrieNode(word[i]);
@@ -265,17 +265,17 @@ int main()
 
     displayTrie(root);
 
-    printf("\n");
-    printf("\n");
-    displaySearch(root, "hello");
-    printf("\n");
+    // printf("\n");
+    // printf("\n");
+    // displaySearch(root, "hello");
+    // printf("\n");
 
-    root = deleteTrie(root, "help");
-    displayTrie(root);
-    printf("\n");
-    printf("\n");
+    // root = deleteTrie(root, "help");
+    // displayTrie(root);
+    // printf("\n");
+    // printf("\n");
 
-    displaySearch(root, "help");
-    freeTrieNode(root);
+    // displaySearch(root, "help");
+    // freeTrieNode(root);
     return 0;
 }

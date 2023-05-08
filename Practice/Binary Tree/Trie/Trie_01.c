@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 // This code is like a dictionary. It stores words. but only accepts words that are all lower case letters
 
@@ -10,10 +11,10 @@ struct TrieNode
 {
     char key;
     struct TrieNode *childNode[ALPHABET_LETTERS];
-    int isLeaf;
+    bool endOfWord;
 };
 
-struct TrieNode *createTrieNode(char key)
+struct TrieNode *createTrieNode(char key) // 'o'
 {
     struct TrieNode *newNode = (struct TrieNode *)malloc(sizeof(struct TrieNode));
     for (int i = 0; i < ALPHABET_LETTERS; i++)
@@ -21,7 +22,7 @@ struct TrieNode *createTrieNode(char key)
         newNode->childNode[i] = NULL;
     }
 
-    newNode->isLeaf = 0;
+    newNode->endOfWord = false;
     newNode->key = key;
     return newNode;
 }
@@ -44,11 +45,16 @@ void freeTrieNode(struct TrieNode *node)
 
 struct TrieNode *insertTrie(struct TrieNode *root, char *word)
 {
+    // help
+
     struct TrieNode *temp = root;
 
     for (int i = 0; word[i] != '\0'; i++)
     {
-        int index = word[i] - 'a';
+        // i = 4
+
+        int index = word[i] - 'a'; // 15
+
         if (temp->childNode[index] == NULL)
         {
             temp->childNode[index] = createTrieNode(word[i]);
@@ -59,11 +65,11 @@ struct TrieNode *insertTrie(struct TrieNode *root, char *word)
         }
         temp = temp->childNode[index];
     }
-    temp->isLeaf = 1;
+    temp->endOfWord = true;
     return root;
 }
 
-int searchTrie(struct TrieNode *root, char *word)
+int searchTrie(struct TrieNode *root, char *word) // hello
 {
     struct TrieNode *temp = root;
 
@@ -76,7 +82,7 @@ int searchTrie(struct TrieNode *root, char *word)
         }
         temp = temp->childNode[index];
     }
-    if (temp != NULL && temp->isLeaf == 1)
+    if (temp != NULL && temp->endOfWord == true)
     {
         return 1;
     }
@@ -122,13 +128,14 @@ char *findLongestPrefix(struct TrieNode *root, char *word)
         return NULL;
     }
 
-    int len = strlen(word);
+    int len = strlen(word); // 4
 
-    char *longestPrefix = (char *)malloc((len + 1) * sizeof(char));
+    char *longestPrefix = (char *)malloc((len + 1) * sizeof(char)); // 5
 
     for (int i = 0; word[i] != '\0'; i++)
     {
         longestPrefix[i] = word[i];
+        // help [5] = help [4]
     }
 
     longestPrefix[len] = '\0';
@@ -155,7 +162,7 @@ int isLeafNode(struct TrieNode *root, char *word)
             temp = temp->childNode[index];
         }
     }
-    return temp->isLeaf;
+    return temp->endOfWord;
 }
 
 struct TrieNode *deleteTrie(struct TrieNode *root, char *word)
@@ -228,7 +235,7 @@ struct TrieNode *deleteTrie(struct TrieNode *root, char *word)
 
 void displayTrie(struct TrieNode *root)
 {
-    if (!root)
+    if (!root) // root == NULL
     {
         return;
     }
@@ -264,18 +271,26 @@ int main()
     root = insertTrie(root, "help");
 
     displayTrie(root);
+    printf("\n");
 
-    // printf("\n");
-    // printf("\n");
-    // displaySearch(root, "hello");
-    // printf("\n");
-
-    // root = deleteTrie(root, "help");
-    // displayTrie(root);
-    // printf("\n");
-    // printf("\n");
-
-    // displaySearch(root, "help");
-    // freeTrieNode(root);
     return 0;
 }
+
+
+// root = \0 -> childNode[7] = node1
+// node1 = 'h' -> childNode[4] = node2
+// node2 = 'e' -> childNode[11] = node3
+// node3 = 'l' -> childNode[11] = node4
+// node4 = 'l' -> childNode[14] = node5
+//             -> childNode[15] = node4.1
+// temp = node5 = 'o'
+// node4.1 = 'p'
+
+
+//         \0
+//      'h' false
+//      'e' false 
+//      'l' false
+//  'l' false 'p' true
+//  'o' true
+// h e l l o p
